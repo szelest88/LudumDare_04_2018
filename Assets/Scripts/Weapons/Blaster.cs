@@ -19,7 +19,7 @@ public class Blaster : Gun
 
     public override void Shoot()
     {
-        Vector3 startDirection = transform.Find("BarrelEnd").localPosition - transform.Find("BarrelStart").localPosition;
+        Vector3 startDirection = transform.Find("BarrelEnd").position - transform.Find("BarrelStart").position;
         GameObject bullet = projectileObjectPool.PoolNext(transform.Find("BarrelEnd").position);
 
         bullet.GetComponent<BlasterProjectile>().startProjectileMovement(startDirection);
