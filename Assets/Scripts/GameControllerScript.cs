@@ -18,7 +18,7 @@ public class GameControllerScript : MonoBehaviour {
 	{
 		public TileType type;
 		public GameObject objRef;
-		public UnitScript unitRef;
+		public Unit unitRef;
 	}
 
 	public TileData[,] tilesMap;
