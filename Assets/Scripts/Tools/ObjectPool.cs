@@ -5,6 +5,7 @@ using UnityEngine;
 public class ObjectPool : MonoBehaviour
 {
     public GameObject pooledObject;
+    private GameObject go;
     public int numberOfObjects;
     public List<GameObject> pooledObjects;
     private int counter = 0;
@@ -24,7 +25,6 @@ public class ObjectPool : MonoBehaviour
     public GameObject PoolNext(Vector3 position)
     {
         int activeCounter = 0;
-        GameObject go = new GameObject();
         do
         {
             go = pooledObjects[counter];
