@@ -50,7 +50,7 @@ public class GameControllerScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-
+		InitTilesArray ();
 	}
 
 
@@ -62,6 +62,11 @@ public class GameControllerScript : MonoBehaviour {
 	public Vector3 MultVec3(Vector3 source, float multX, float multY, float multZ)
 	{
 		return new Vector3 (source.x * multX, source.y * multY, source.z * multZ);
+	}
+
+	public Vector3 MultVec3(Vector3 source, float multValue)
+	{
+		return MultVec3 (source, multValue, multValue, multValue);
 	}
 
 	public void OnTeleSelectionStart()
@@ -84,7 +89,29 @@ public class GameControllerScript : MonoBehaviour {
 		
 	}
 
-	//public TileData
+	public TileData RayCastToTileData(RaycastHit hit)
+	{
+		TileData returnVal = new TileData ();
+
+		if (hit.collider == null)
+		{
+			returnVal.type = TileType.EMPTY;
+			return returnVal;
+		}
+
+		returnVal.objRef = hit.collider.gameObject;
+		returnVal.type = TileType.WALL;
+
+		Unit unitScript = returnVal.objRef.GetComponent<Unit>();
+
+		if (unitScript != null)
+		{
+			returnVal.unitRef = unitScript;
+			returnVal.type = TileType.UNIT;
+		}
+
+		return returnVal;
+	}
 
 	public void InitTilesArray()
 	{
@@ -102,10 +129,11 @@ public class GameControllerScript : MonoBehaviour {
 						
 					Vector3 checkPos = MultVec3 (tileSize, iterX, iterY, iterZ) + transform.position;
 
+					Vector3 colliderSize = MultVec3 (tileSize, 0.4f);
 
-					if (Physics.BoxCast (checkPos, tileSize * 0.8f, Vector3.one, out hit, Quaternion.identity, 0))
+					if (Physics.BoxCast (checkPos + Vector3.up, colliderSize, Vector3.down, out hit, transform.rotation, 1))
 					{
-						
+						tilesMap [iterX, iterY, iterZ] = RayCastToTileData (hit);
 					}
 					else
 					{
