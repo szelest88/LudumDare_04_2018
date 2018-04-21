@@ -10,6 +10,6 @@ public class CoordsTest : MonoBehaviour {
 	}
 	
 	void Update () {
-    //    transform.position = new Vector3(transform.position.x + 0.001f, transform.position.y, transform.position.z);
+        transform.position = new Vector3(transform.position.x + 0.001f, transform.position.y, transform.position.z);
 	}
 }
