@@ -281,7 +281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c1ff470b84ae7543858ff79f23b8504, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  basicProjectilesPool: {fileID: 114741794898093302}
+  basicProjectilesPool: {fileID: 0}
   zigZagProjectilePool: {fileID: 114741794898093302}
 --- !u!114 &114554172381357054
 MonoBehaviour:
@@ -294,7 +294,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 568fe34a01d252045833b5f95340e065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pooledObject: {fileID: 0}
+  pooledObject: {fileID: 1703436799186764, guid: decba2b275a689248a881ab4434a62aa,
+    type: 2}
   numberOfObjects: 5
   pooledObjects: []
 --- !u!114 &114741794898093302
@@ -308,6 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 568fe34a01d252045833b5f95340e065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pooledObject: {fileID: 0}
+  pooledObject: {fileID: 1259059079895294, guid: 8170e5e5d119fcc498c819fd2c3780dd,
+    type: 2}
   numberOfObjects: 10
   pooledObjects: []
