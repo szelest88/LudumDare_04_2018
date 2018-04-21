@@ -8,8 +8,11 @@ public class CoordsTest : MonoBehaviour {
 	void Start () {
 		
 	}
-	
-	void Update () {
-        transform.position = new Vector3(transform.position.x + 0.001f, transform.position.y, transform.position.z);
-	}
+	void moveBy(Vector3 translation)
+    {
+        transform.position = transform.position + translation;
+    }
+	//void Update () {
+ //       transform.position = new Vector3(transform.position.x + 0.01f, transform.position.y, transform.position.z);
+	//}
 }
