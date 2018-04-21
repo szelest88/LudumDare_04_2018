@@ -51,10 +51,20 @@ public class ControllerWrapper : SteamVR_TrackedController {
 
     public override void OnTriggerClicked(ClickedEventArgs e)
     {
+
         base.OnTriggerClicked(e);
-        Debug.Log("trigger clicked!"); // to be specific, when trigger in very high position - not the "click" itself
-        VrapperTriggerHaptics(0.1f,0.5f);
+        Debug.LogError("trigger clicked!"); // to be specific, when trigger in very high position - not the "click" itself
+
+       // if (is_left)
+        {
+            VrapperTriggerHaptics(0.1f, 0.5f);
+
+            
+        
+        }
     }
+
+
 
     public override void OnTriggerUnclicked(ClickedEventArgs e)
     {
