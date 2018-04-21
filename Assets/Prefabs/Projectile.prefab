@@ -112,6 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileSpeed: 100
+  projectileDamage: 1
 --- !u!135 &135098295713055978
 SphereCollider:
   m_ObjectHideFlags: 1

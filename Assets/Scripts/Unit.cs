@@ -8,10 +8,23 @@ using UnityEngine;
 /// </summary>
 public abstract class Unit : MonoBehaviour
 {
-    public float hp;
+    [SerializeField]
+    private float health;
+    public float Health
+    {
+        get
+        {
+            return health;
+        }
+        set
+        {
+            health = value;
+            if (health <= 0) gameObject.SetActive(false);
+        }
+    }
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
 		
 	}

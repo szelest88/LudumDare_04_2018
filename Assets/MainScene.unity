@@ -597,17 +597,7 @@ Prefab:
       propertyPath: bulletPrefab
       value: 
       objectReference: {fileID: 1114282541}
-    - target: {fileID: 114345012573199468, guid: e23133001ebd43247978ff700c36e77e,
-        type: 2}
-      propertyPath: bulletPrefab
-      value: 
-      objectReference: {fileID: 1114282541}
-    - target: {fileID: 4737191655052720, guid: e23133001ebd43247978ff700c36e77e, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 3
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 114345012573199468, guid: e23133001ebd43247978ff700c36e77e, type: 2}
+    m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e23133001ebd43247978ff700c36e77e, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &672622968
@@ -1374,6 +1364,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: -1
   origin: {fileID: 0}
+--- !u!1001 &1855306996
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4149175240744836, guid: 8170e5e5d119fcc498c819fd2c3780dd, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 2.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 4149175240744836, guid: 8170e5e5d119fcc498c819fd2c3780dd, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.075000286
+      objectReference: {fileID: 0}
+    - target: {fileID: 4149175240744836, guid: 8170e5e5d119fcc498c819fd2c3780dd, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 3.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 4149175240744836, guid: 8170e5e5d119fcc498c819fd2c3780dd, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4149175240744836, guid: 8170e5e5d119fcc498c819fd2c3780dd, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4149175240744836, guid: 8170e5e5d119fcc498c819fd2c3780dd, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4149175240744836, guid: 8170e5e5d119fcc498c819fd2c3780dd, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4149175240744836, guid: 8170e5e5d119fcc498c819fd2c3780dd, type: 2}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1259059079895294, guid: 8170e5e5d119fcc498c819fd2c3780dd, type: 2}
+      propertyPath: m_Name
+      value: ZigZagProjectile
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 114498525055059848, guid: 8170e5e5d119fcc498c819fd2c3780dd, type: 2}
+  m_ParentPrefab: {fileID: 100100000, guid: 8170e5e5d119fcc498c819fd2c3780dd, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1931792452
 GameObject:
   m_ObjectHideFlags: 0
