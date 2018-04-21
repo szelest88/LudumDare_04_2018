@@ -17,8 +17,15 @@ public abstract class Projectile : MonoBehaviour
     public float projectileSpeed;
     public float projectileDamage;
 
-    public abstract void startProjectileMovement(Vector3 direction);
-    public abstract void dealDamage(float damage, GameObject affectedObject);
+    public void startProjectileMovement(Vector3 direction)
+    {
+        GetComponent<Rigidbody>().AddForce(direction * projectileSpeed);
+    }
+
+    public void dealDamage(float damage, GameObject affectedObject)
+    {
+        affectedObject.GetComponentInParent<Unit>().Health -= projectileDamage;
+    }
 
 
 
