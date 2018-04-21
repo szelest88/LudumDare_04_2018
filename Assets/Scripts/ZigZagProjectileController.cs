@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicProjectileController : Projectile
-{
+public class ZigZagProjectileController : Projectile {
 
-    // Use this for initialization
-    void Start ()
+	// Use this for initialization
+	void Start ()
     {
 		
 	}
-
-    private void Awake()
+	
+	// Update is called once per frame
+	void Update ()
     {
-        
-    }
-
+		
+	}
     public override void startProjectileMovement(Vector3 direction)
     {
         GetComponent<Rigidbody>().AddForce(direction * projectileSpeed);
@@ -24,24 +22,16 @@ public class BasicProjectileController : Projectile
 
     public override void dealDamage(float damage, GameObject affectedObject)
     {
-        affectedObject.GetComponentInParent<Unit>().Health -= projectileDamage;
+        affectedObject.GetComponent<Unit>().Health -= projectileDamage;
     }
 
 
     private void OnCollisionEnter(Collision collision)
     {
-        
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            Debug.Log("chuj");
             dealDamage(projectileDamage, collision.gameObject);
         }
-        
-    }
 
-    // Update is called once per frame
-    void Update ()
-    {
-		
-	}
+    }
 }
