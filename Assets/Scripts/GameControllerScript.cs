@@ -21,6 +21,12 @@ public class GameControllerScript : MonoBehaviour {
 		public UnitScript unitRef;
 	}
 
+	/// <summary>
+	/// Defines, how far the manager will look for when initing the game field array.
+	/// Each value means, how far the script will look each way. So, 10 means looking 10 units left and 10 units right.
+	/// </summary>
+	public Vector3 mapSize = new Vector3(10, 10, 1);
+
 	public TileData[,] tilesMap;
 
 	/// <summary>
@@ -44,6 +50,12 @@ public class GameControllerScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
+	}
+
+
+	public void InitTilesArray()
+	{
+		Physics.BoxCast boxCast = new Physics.BoxCast ();
 	}
 
 }
