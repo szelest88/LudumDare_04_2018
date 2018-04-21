@@ -21,10 +21,11 @@ public class Crossbow : Weapon
     public override void Shoot()
     {
         Vector3 startDirection = transform.Find("BarrelEnd").position - transform.Find("BarrelStart").position;
+        GameObject bullet = projectileObjectPool.PoolNext(transform.Find("BarrelEnd").position);
         
+        bullet.transform.eulerAngles = new Vector3(transform.eulerAngles.x + 90, transform.eulerAngles.y, transform.eulerAngles.z);
 
-        GameObject bullet = projectileObjectPool.PoolNext(transform.Find("BarrelEnd").position + startDirection.normalized );
-        bullet.GetComponent<CrossbowBolt>().startProjectileMovement(transform.Find("BarrelEnd").position - transform.Find("BarrelStart").position);
+        bullet.GetComponent<CrossbowBolt>().startProjectileMovement(startDirection);
         weaponCooldown.startTimer();
     }
 }

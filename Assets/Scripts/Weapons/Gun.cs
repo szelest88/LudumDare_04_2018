@@ -20,8 +20,10 @@ public class Gun : Weapon
 
     public override void Shoot()
     {
-        GameObject bullet = projectileObjectPool.PoolNext(transform.Find("BarrelEnd").position + new Vector3(0, 0, 0.1f));
-        bullet.GetComponent<GunBullet>().startProjectileMovement(transform.Find("BarrelEnd").position - transform.Find("BarrelStart").position);
+        Vector3 startDirection = transform.Find("BarrelEnd").position - transform.Find("BarrelStart").position;
+        GameObject bullet = projectileObjectPool.PoolNext(transform.Find("BarrelEnd").position);
+
+        bullet.GetComponent<GunBullet>().startProjectileMovement(startDirection);
         weaponCooldown.startTimer();
     }
     
