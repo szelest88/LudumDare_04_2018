@@ -22,6 +22,6 @@ public class WeaponController : MonoBehaviour
     void Shoot()
     {
         GameObject bullet = Instantiate(bulletPrefab, transform.Find("BarrelEnd").position + new Vector3(0,0,0.2f), Quaternion.identity);
-        bullet.GetComponent<ProjectileController>().startMovement(transform.Find("BarrelEnd").position - transform.Find("Barrel").position);
+        bullet.GetComponent<BasicProjectileController>().startProjectileMovement(transform.Find("BarrelEnd").position - transform.Find("Barrel").position);
     }
 }
