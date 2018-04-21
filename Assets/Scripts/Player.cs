@@ -37,8 +37,7 @@ public class Player : Unit
     
     public override void MoveStart()
     {
-
-        parabolicPointer.enabled = true;
+        process(PlayerEvent.MOVE_START);
     }
 
     public void OnTriggerStart()

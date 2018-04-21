@@ -426,7 +426,7 @@ public class GameControllerScript : MonoBehaviour {
 
 					Vector3 colliderSize = MultVec3 (tileSize, 0.4f);
 
-					if (Physics.BoxCast (checkPos + Vector3.up, colliderSize, Vector3.down, out hit, transform.rotation, 1))
+					if (Physics.BoxCast (checkPos + Vector3.up * 1.5f, colliderSize, Vector3.down, out hit, transform.rotation, 1))
 					{
 						tilesMap [iterX, iterY, iterZ] = RayCastToTileData (hit);
 
