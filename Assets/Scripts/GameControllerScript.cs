@@ -5,6 +5,12 @@ using System;
 
 public class GameControllerScript : MonoBehaviour {
 
+	public enum GameFlowState
+	{
+		DELAY_FOR_NEXT_MOVE,
+		WAITING_FOR_UNIT
+	}
+
 	public enum TileType
 	{
 		EMPTY,
@@ -19,6 +25,21 @@ public class GameControllerScript : MonoBehaviour {
 		public TileType type;
 		public GameObject objRef;
 		public Unit unitRef;
+	}
+
+	public struct CanMoveResponse
+	{
+		public bool canMove;
+
+		public Vector3 targetWorldPos;
+		public Vector3 targetLocalPos;
+
+		public Vector3 targetGridPos;
+
+		/// <summary>
+		/// How many grid spaces the unit will move.
+		/// </summary>
+		public int spacesMoved;
 	}
 
 	/// <summary>
@@ -39,6 +60,14 @@ public class GameControllerScript : MonoBehaviour {
 	/// </summary>
 	public Vector3 firstTileOffset = Vector3.zero;
 
+	public float delayBetweenMoves = 1;
+
+	public float moveDelayTimer = 1;
+
+
+	public int currentUnitIndex = 0;
+	public List<Unit> unitsList;
+
 	public static GameControllerScript Instance;
 
 	void Awake()
@@ -51,6 +80,37 @@ public class GameControllerScript : MonoBehaviour {
 	void Start () {
 
 		InitTilesArray ();
+	}
+
+	void Update()
+	{
+		
+	}
+
+	public void NextMove()
+	{
+		
+	}
+
+
+	public Vector3 WorldPosToGridPos(Vector3 worldPos)
+	{
+		return LocalPosToGridPos (transform.InverseTransformPoint(worldPos));
+	}
+
+	public Vector3 LocalPosToGridPos(Vector3 localPos)
+	{
+		Vector3 halfTileSize = MultVec3 (tileSize, 0.5f);
+
+		localPos += halfTileSize;
+
+		Vector3 returnVal;
+
+		returnVal.x = localPos.x / tileSize.x;
+		returnVal.y = localPos.y / tileSize.y;
+		returnVal.z = localPos.z / tileSize.z;
+
+		return returnVal;
 	}
 
 
@@ -89,6 +149,109 @@ public class GameControllerScript : MonoBehaviour {
 		
 	}
 
+	public CanMoveResponse IWannaMoveWorldPos(Vector3 worldPos, Unit movingUnit)
+	{
+		return IWannaMoveLocalPos (transform.InverseTransformPoint(worldPos), movingUnit);
+	}
+
+	public CanMoveResponse IWannaMoveLocalPos(Vector3 localPos, Unit movingUnit)
+	{
+		return IWannaMoveGridPos(LocalPosToGridPos(localPos), movingUnit);
+	}
+
+	public CanMoveResponse IWannaMoveGridPos(Vector3 gridPos, Unit movingUnit)
+	{
+		CanMoveResponse responseObj = new CanMoveResponse ();
+
+		if (unitsList.Contains (movingUnit) == false || unitsList[currentUnitIndex] != movingUnit || movingUnit.movesRemaining <= 0)
+		{
+			responseObj.canMove = false;
+			return responseObj;
+		}
+
+		return responseObj;
+
+	}
+
+	public List<Vector3> GetMovePosesToTargetTile(Vector3 fromGridPos, Vector3 toGridPos)
+	{
+		List<Vector3> returnList = new List<Vector3> ();
+
+		int gridHeight = (int)fromGridPos.y;
+
+		int[,,] valueGrid = new int[(int)mapSize.x, (int)mapSize.y, (int)mapSize.z];
+
+		List<Vector3> currSearchTiles = new List<Vector3> ();
+		List<Vector3> newSearchTiles = new List<Vector3> ();
+
+		Vector3 checkVec1 = new Vector3 (1, 0, 0);
+		Vector3 checkVec2 = new Vector3 (-1, 0, 0);
+		Vector3 checkVec3 = new Vector3 (0, 0, 1);
+		Vector3 checkVec4 = new Vector3 (0, 0, -1);
+
+		currSearchTiles.Add (toGridPos);
+
+		int currDist = 1;
+
+		bool foundStart = false;
+
+		while (foundStart == false)
+		{
+			if (currSearchTiles.Count <= 0)
+				foundStart = true;
+
+			for (int i = 0; i < currSearchTiles.Count; i++)
+			{
+				if (currSearchTiles [i] == fromGridPos)
+				{
+					i = currSearchTiles.Count;
+					foundStart = true;
+				}
+
+				if (MarkGridValue (valueGrid, currSearchTiles [i] + checkVec1, currDist, mapSize))
+					newSearchTiles.Add (currSearchTiles [i] + checkVec1);
+				if (MarkGridValue (valueGrid, currSearchTiles [i] + checkVec2, currDist, mapSize))
+					newSearchTiles.Add (currSearchTiles [i] + checkVec2);
+				if (MarkGridValue (valueGrid, currSearchTiles [i] + checkVec3, currDist, mapSize))
+					newSearchTiles.Add (currSearchTiles [i] + checkVec3);
+				if (MarkGridValue (valueGrid, currSearchTiles [i] + checkVec4, currDist, mapSize))
+					newSearchTiles.Add (currSearchTiles [i] + checkVec4);
+			}
+
+			currSearchTiles.Clear ();
+			currSearchTiles = new List<Vector3> (newSearchTiles);
+
+			newSearchTiles.Clear ();
+		}
+
+		bool foundEnd = false;
+
+		while (foundEnd == false)
+		{
+			int bestDist = 400000;
+
+			foundEnd = true;
+		}
+
+		return returnList;
+	}
+
+	public bool MarkGridValue(int[,,] valueGrid, Vector3 markPos, int distVal, Vector3 valGridSize)
+	{
+		// If target tile outta bounds, return:
+		if (markPos.x < 0 || markPos.y < 0 || markPos.z < 0 ||
+		    markPos.x >= valGridSize.x || markPos.y >= valGridSize.y || markPos.z >= valGridSize.z)
+			return false;
+
+		// If this tile's dist is smaller, than proposed, then do nothing:
+		if (valueGrid [(int)markPos.x, (int)markPos.y, (int)markPos.z] > 0 && valueGrid [(int)markPos.x, (int)markPos.y, (int)markPos.z] < distVal)
+			return false;
+
+		valueGrid [(int)markPos.x, (int)markPos.y, (int)markPos.z] = distVal;
+
+		return true;
+	}
+
 	public TileData RayCastToTileData(RaycastHit hit)
 	{
 		TileData returnVal = new TileData ();
@@ -104,6 +267,9 @@ public class GameControllerScript : MonoBehaviour {
 
 		Unit unitScript = returnVal.objRef.GetComponent<Unit>();
 
+		if (unitScript == null)
+			unitScript = returnVal.objRef.GetComponentInParent<Unit>();
+
 		if (unitScript != null)
 		{
 			returnVal.unitRef = unitScript;
@@ -115,6 +281,7 @@ public class GameControllerScript : MonoBehaviour {
 
 	public void InitTilesArray()
 	{
+		unitsList = new List<Unit> ();
 		tilesMap = new TileData[(int)mapSize.x, (int)mapSize.y, (int)mapSize.z];
 
 		RaycastHit hit;
@@ -134,6 +301,9 @@ public class GameControllerScript : MonoBehaviour {
 					if (Physics.BoxCast (checkPos + Vector3.up, colliderSize, Vector3.down, out hit, transform.rotation, 1))
 					{
 						tilesMap [iterX, iterY, iterZ] = RayCastToTileData (hit);
+
+						if (tilesMap [iterX, iterY, iterZ].unitRef != null)
+							unitsList.Add (tilesMap [iterX, iterY, iterZ].unitRef);
 					}
 					else
 					{
