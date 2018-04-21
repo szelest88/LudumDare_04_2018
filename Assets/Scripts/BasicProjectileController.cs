@@ -33,8 +33,8 @@ public class BasicProjectileController : Projectile
         
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            Debug.Log("chuj");
             dealDamage(projectileDamage, collision.gameObject);
+            gameObject.SetActive(false);
         }
         
     }
