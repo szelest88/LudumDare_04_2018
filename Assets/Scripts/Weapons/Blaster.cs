@@ -19,10 +19,10 @@ public class Blaster : Gun
 
     public override void Shoot()
     {
-        Vector3 startDirection = transform.Find("BarrelEnd").position - transform.Find("BarrelStart").position;
-        GameObject bullet = projectileObjectPool.PoolNext(transform.Find("BarrelEnd").position - startDirection.normalized);
+        Vector3 startDirection = transform.Find("BarrelEnd").localPosition - transform.Find("BarrelStart").localPosition;
+        GameObject bullet = projectileObjectPool.PoolNext(transform.Find("BarrelEnd").position);
 
-        bullet.GetComponent<BlasterProjectile>().startProjectileMovement(transform.Find("BarrelEnd").position - transform.Find("BarrelStart").position);
+        bullet.GetComponent<BlasterProjectile>().startProjectileMovement(startDirection);
         weaponCooldown.startTimer();
     }
 }
