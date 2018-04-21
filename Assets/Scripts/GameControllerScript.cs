@@ -42,6 +42,9 @@ public class GameControllerScript : MonoBehaviour {
 		public int spacesMoved;
 	}
 
+	public GameObject lookTileSelectionObj;
+	public GameObject playerTileWallObj;
+
 	/// <summary>
 	/// Defines, how far the manager will look for when initing the game field array.
 	/// The manager looks only forward in each axis.
@@ -113,6 +116,15 @@ public class GameControllerScript : MonoBehaviour {
 		return returnVal;
 	}
 
+	public Vector3 GridToWorldPos(Vector3 gridPos)
+	{
+		Vector3 returnVal;
+
+		returnVal = MultVec3 (gridPos, tileSize);
+
+		return returnVal;
+	}
+
 
 	public Vector3 MultVec3(Vector3 vec1, Vector3 vec2)
 	{
@@ -131,17 +143,35 @@ public class GameControllerScript : MonoBehaviour {
 
 	public void OnTeleSelectionStart()
 	{
+		if (lookTileSelectionObj != null)
+			lookTileSelectionObj.SetActive (true);
 		
 	}
 
 	public void OnTeleSelectionUpdate(Vector3 worldPos)
 	{
-		
+		if (lookTileSelectionObj != null)
+			lookTileSelectionObj.transform.position = GridToWorldPos(WorldPosToGridPos(worldPos));
 	}
 
 	public void OnTeleSelectionStop()
 	{
-		
+		if (lookTileSelectionObj != null)
+			lookTileSelectionObj.SetActive (false);
+	}
+
+	public void PlayerChangedWorldPos(Vector3 worldPos)
+	{
+		if (playerTileWallObj != null)
+		{
+			playerTileWallObj.SetActive (true);
+			playerTileWallObj.transform.position = worldPos;
+		}
+	}
+
+	public void PlayerChangedLocalPos(Vector3 localPos)
+	{
+		PlayerChangedWorldPos (transform.TransformPoint (localPos));
 	}
 
 	public void OnTeleportApply()
@@ -226,11 +256,64 @@ public class GameControllerScript : MonoBehaviour {
 
 		bool foundEnd = false;
 
+		Vector3 checkedPos = fromGridPos;
+
 		while (foundEnd == false)
 		{
-			int bestDist = 400000;
+			if (checkedPos == toGridPos)
+			{
+				returnList.Add (toGridPos);
 
-			foundEnd = true;
+				foundEnd = true;
+			}
+			else
+			{
+
+				int bestDist = 400000;
+
+				Vector3 bestPos = Vector3.zero;
+
+				int checkedVal = -1;
+
+				checkedVal = GetGridValue (valueGrid, checkedPos + checkVec1, mapSize);
+				if (checkedVal > -1 && checkedVal < bestDist)
+				{
+					bestDist = checkedVal;
+					bestPos = checkedPos + checkVec1;
+				}
+
+				checkedVal = GetGridValue (valueGrid, checkedPos + checkVec2, mapSize);
+				if (checkedVal > -1 && checkedVal < bestDist)
+				{
+					bestDist = checkedVal;
+					bestPos = checkedPos + checkVec2;
+				}
+
+				checkedVal = GetGridValue (valueGrid, checkedPos + checkVec3, mapSize);
+				if (checkedVal > -1 && checkedVal < bestDist)
+				{
+					bestDist = checkedVal;
+					bestPos = checkedPos + checkVec3;
+				}
+
+				checkedVal = GetGridValue (valueGrid, checkedPos + checkVec4, mapSize);
+				if (checkedVal > -1 && checkedVal < bestDist)
+				{
+					bestDist = checkedVal;
+					bestPos = checkedPos + checkVec4;
+				}
+
+				if (bestDist < 40000)
+				{
+					returnList.Add (bestPos);
+					checkedPos = bestPos;
+				}
+				else
+				{
+					// If there is no target pos, then return null, as there is no correct path:
+					return null;
+				}
+			}
 		}
 
 		return returnList;
@@ -250,6 +333,17 @@ public class GameControllerScript : MonoBehaviour {
 		valueGrid [(int)markPos.x, (int)markPos.y, (int)markPos.z] = distVal;
 
 		return true;
+	}
+
+	public int GetGridValue(int[,,] valueGrid, Vector3 markPos, Vector3 valGridSize)
+	{
+		// If target tile outta bounds, return:
+		if (markPos.x < 0 || markPos.y < 0 || markPos.z < 0 ||
+			markPos.x >= valGridSize.x || markPos.y >= valGridSize.y || markPos.z >= valGridSize.z)
+			return -1;
+
+
+		return valueGrid [(int)markPos.x, (int)markPos.y, (int)markPos.z];
 	}
 
 	public TileData RayCastToTileData(RaycastHit hit)
