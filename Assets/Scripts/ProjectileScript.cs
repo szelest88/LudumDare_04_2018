@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Projectile.
+/// Parent script for all projectiles.
+/// It contains common methods, that every projectile should have.
 /// </summary>
-public class Projectile : MonoBehaviour {
+public class ProjectileScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
 		
 	}
+
+
 
 }
