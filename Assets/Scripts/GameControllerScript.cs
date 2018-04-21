@@ -137,7 +137,10 @@ public class GameControllerScript : MonoBehaviour {
 					}
 					else
 					{
-						tilesMap [iterX, iterY, iterZ].type = TileType.EMPTY;
+						if (Physics.BoxCast (checkPos + Vector3.up, colliderSize, Vector3.down, out hit, transform.rotation, 2))
+							tilesMap [iterX, iterY, iterZ].type = TileType.EMPTY;
+						else
+							tilesMap [iterX, iterY, iterZ].type = TileType.WALL;
 					}
 				}
 			}
