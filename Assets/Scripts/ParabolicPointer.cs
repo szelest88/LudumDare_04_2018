@@ -28,6 +28,8 @@ public class ParabolicPointer : MonoBehaviour {
 
     private Mesh ParabolaMesh;
 
+    private List<Vector3> ParabolaPoints;
+
     // Parabolic motion equation, y = p0 + v0*t + 1/2at^2
     private static float ParabolicCurve(float p0, float v0, float a, float t)
     {
@@ -165,6 +167,18 @@ public class ParabolicPointer : MonoBehaviour {
         m.RecalculateNormals();
     }
 
+    public Vector3? GetPosition()
+    {
+        if (ParabolaPoints.Count > 0)
+        {
+            return ParabolaPoints[ParabolaPoints.Count - 1];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     void OnEnable() {
         if (GameControllerScript.Instance) {
             GameControllerScript.Instance.OnTeleSelectionStart();
@@ -187,8 +201,6 @@ public class ParabolicPointer : MonoBehaviour {
         ParabolaMesh.triangles = new int[0];
     }
 
-    private List<Vector3> ParabolaPoints;
-
     void Update()
     {
         // 1. Calculate Parabola Points
@@ -208,9 +220,12 @@ public class ParabolicPointer : MonoBehaviour {
         GenerateMesh(ref ParabolaMesh, ParabolaPoints, velocity, Time.time % 1);
         Graphics.DrawMesh(ParabolaMesh, Matrix4x4.identity, GraphicMaterial, gameObject.layer);
 
-        if (GameControllerScript.Instance) {
-            if (ParabolaPoints.Count > 0) {
-                GameControllerScript.Instance.OnTeleSelectionUpdate(ParabolaPoints[ParabolaPoints.Count - 1]);
+        var position = GetPosition();
+        if (position != null)
+        {
+            if (GameControllerScript.Instance)
+            {
+                GameControllerScript.Instance.OnTeleSelectionUpdate(position.Value);
             }
         }
     }

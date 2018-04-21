@@ -55,12 +55,12 @@ public class ControllerWrapper : SteamVR_TrackedController {
         base.OnTriggerClicked(e);
         Debug.LogError("trigger clicked!"); // to be specific, when trigger in very high position - not the "click" itself
 
-       // if (is_left)
-        {
-            VrapperTriggerHaptics(0.1f, 0.5f);
+        VrapperTriggerHaptics(0.1f, 0.5f);
 
-            
-        
+
+        if (!is_left)
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().OnTrigger();
         }
     }
 
