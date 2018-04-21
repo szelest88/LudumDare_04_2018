@@ -60,7 +60,7 @@ public class ControllerWrapper : SteamVR_TrackedController {
 
         if (!is_left)
         {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().OnTrigger();
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().OnTriggerStart();
         }
     }
 
@@ -69,6 +69,12 @@ public class ControllerWrapper : SteamVR_TrackedController {
     public override void OnTriggerUnclicked(ClickedEventArgs e)
     {
         base.OnTriggerUnclicked(e);
+
+        if (!is_left)
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().OnTriggerEnd();
+        }
+
     }
 
     public override void OnMenuClicked(ClickedEventArgs e)

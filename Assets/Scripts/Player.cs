@@ -16,7 +16,8 @@ public class Player : Unit
         ENTER,
         EXIT,
         MOVE_START,
-        TELEPORT
+        TRIGGER_START,
+        TRIGGER_END
     }
     PlayerState playerState;
 
@@ -40,9 +41,13 @@ public class Player : Unit
         parabolicPointer.enabled = true;
     }
 
-    public void OnTrigger()
+    public void OnTriggerStart()
     {
-        process(PlayerEvent.TELEPORT);
+        process(PlayerEvent.TRIGGER_START);
+    }
+    public void OnTriggerEnd()
+    {
+        process(PlayerEvent.TRIGGER_END);
     }
 
     void init(PlayerState state)
@@ -82,18 +87,26 @@ public class Player : Unit
                 switch (playerEvent)
                 {
                     case PlayerEvent.ENTER:
-                        parabolicPointer.enabled = true;
                         break;
 
                     case PlayerEvent.EXIT:
                         parabolicPointer.enabled = false;
                         break;
 
-                    case PlayerEvent.TELEPORT:
+                    case PlayerEvent.TRIGGER_START:
+
+                        parabolicPointer.enabled = true;
+                        break;
+                    case PlayerEvent.TRIGGER_END:
+                        parabolicPointer.enabled = false;
                         var pointerPos = parabolicPointer.GetPosition();
                         if(pointerPos!=null)
                         {
-
+                            var response = GameControllerScript.Instance.IWannaMoveWorldPos(pointerPos.Value, this);
+                            if (response.canMove)
+                            {
+                                transform.position = response.targetWorldPos;
+                            }
                         }
                         break;
                 }
