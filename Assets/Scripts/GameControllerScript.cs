@@ -5,12 +5,14 @@ using System;
 
 public class GameControllerScript : MonoBehaviour {
 
+	[Serializable]
 	public enum GameFlowState
 	{
 		DELAY_FOR_NEXT_MOVE,
 		WAITING_FOR_UNIT
 	}
 
+	[Serializable]
 	public enum TileType
 	{
 		EMPTY,
@@ -71,6 +73,8 @@ public class GameControllerScript : MonoBehaviour {
 	public int currentUnitIndex = 0;
 	public List<Unit> unitsList;
 
+	public GameFlowState currentGameState = GameFlowState.DELAY_FOR_NEXT_MOVE;
+
 	public static GameControllerScript Instance;
 
 	void Awake()
@@ -87,12 +91,42 @@ public class GameControllerScript : MonoBehaviour {
 
 	void Update()
 	{
-		
+		if (currentGameState == GameFlowState.DELAY_FOR_NEXT_MOVE)
+		{
+			moveDelayTimer -= Time.deltaTime;
+
+			if (moveDelayTimer <= 0)
+			{
+				currentGameState = GameFlowState.WAITING_FOR_UNIT;
+				NextMove ();
+			}
+		}
+
 	}
 
 	public void NextMove()
 	{
-		
+		if (currentUnitIndex >= unitsList.Count)
+			currentUnitIndex = 0;
+
+		unitsList [currentUnitIndex].MoveStart ();
+	}
+
+	public void MoveEnd(Unit who)
+	{
+		if (unitsList.Contains (who) == false)
+			return;
+
+		if (unitsList [currentUnitIndex] == who)
+		{
+			currentUnitIndex += 1;
+			if (currentUnitIndex >= unitsList.Count)
+				currentUnitIndex = 0;
+
+			moveDelayTimer = moveDelayTimer;
+
+			currentGameState = GameFlowState.DELAY_FOR_NEXT_MOVE;
+		}
 	}
 
 
