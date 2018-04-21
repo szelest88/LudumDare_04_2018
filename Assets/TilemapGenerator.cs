@@ -14,7 +14,8 @@ public class TilemapGenerator : MonoBehaviour {
             for (int j = 0; j < 10; j++)
             {
                 GameObject anotherOne = Instantiate(go);
-                anotherOne.transform.Translate(i, transform.position.y, j);
+                anotherOne.transform.parent = this.transform;
+                anotherOne.transform.Translate(i*2, transform.position.y, j*2);
             }
         }
         //transform.GetChild(0);
