@@ -35,7 +35,8 @@ public class ObjectPool : MonoBehaviour
             if (activeCounter == numberOfObjects) throw new UnityException("No remaining pooled objects");
         }
         while (go.activeInHierarchy);
-        
+
+        if (go.GetComponent<Rigidbody>() != null) go.GetComponent<Rigidbody>().velocity = Vector3.zero;
         go.transform.position = position;
         go.SetActive(true);
 
