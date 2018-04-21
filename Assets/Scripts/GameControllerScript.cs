@@ -55,7 +55,7 @@ public class GameControllerScript : MonoBehaviour {
 
 	public void InitTilesArray()
 	{
-		Physics.BoxCast boxCast = new Physics.BoxCast ();
+		//Physics.BoxCast boxCast = new Physics.BoxCast ();
 	}
 
 }
