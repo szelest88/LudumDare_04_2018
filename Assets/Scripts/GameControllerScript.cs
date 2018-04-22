@@ -148,6 +148,23 @@ public class GameControllerScript : MonoBehaviour {
 		}
 	}
 
+	public Vector3 GetUnitPos(Unit who)
+	{
+		for (int iterX = 0; iterX < mapSize.x; iterX++)
+		{
+			for (int iterY = 0; iterY < mapSize.y; iterY++)
+			{
+				for (int iterZ = 0; iterZ < mapSize.z; iterZ++)
+				{
+					if (tilesMap [iterX, iterY, iterZ].type == TileType.UNIT && tilesMap [iterX, iterY, iterZ].unitRef == who)
+						return new Vector3 (iterX, iterY, iterZ);
+				}
+			}
+		}
+
+		return new Vector3 (-1, -1, -1);
+	}
+
 	/// <summary>
 	/// Should be called only when the unit controlled by player gets moved.
 	/// </summary>
@@ -423,6 +440,21 @@ public class GameControllerScript : MonoBehaviour {
 
 	public void IJustMovedGridPos(Vector3 gridPos, Unit movingUnit)
 	{
+		movingUnit.gridPos = gridPos;
+
+		Vector3 fromGridPos = GetUnitPos (movingUnit);
+
+		if (fromGridPos.x > -1)
+		{
+			tilesMap [(int)gridPos.x, (int)gridPos.y, (int)gridPos.z].type = TileType.UNIT;
+			tilesMap [(int)gridPos.x, (int)gridPos.y, (int)gridPos.z].objRef = movingUnit.gameObject;
+			tilesMap [(int)gridPos.x, (int)gridPos.y, (int)gridPos.z].unitRef = movingUnit;
+
+			tilesMap [(int)fromGridPos.x, (int)fromGridPos.y, (int)fromGridPos.z].type = TileType.EMPTY;
+			tilesMap [(int)fromGridPos.x, (int)fromGridPos.y, (int)fromGridPos.z].objRef = null;
+			tilesMap [(int)fromGridPos.x, (int)fromGridPos.y, (int)fromGridPos.z].unitRef = null;
+		}
+
 		if (unitsList.Contains (movingUnit) == false || unitsList [currentUnitIndex] != movingUnit)
 			return;
 
@@ -432,7 +464,7 @@ public class GameControllerScript : MonoBehaviour {
 			currPlayerHighlightObj.transform.position = movingUnit.transform.position;
 		}
 
-		movingUnit.gridPos = gridPos;
+
 	}
 
 	public int GetMoveDistToTargetTile(Vector3 fromGridPos, Vector3 toGridPos)
