@@ -42,6 +42,11 @@ public class GameControllerScript : MonoBehaviour {
 		/// How many grid spaces the unit will move.
 		/// </summary>
 		public int spacesMoved;
+
+		/// <summary>
+		///  List of points in world orient, that the object should follow to get to the end pos.
+		/// </summary>
+		public List<Vector3> movePathWorldPos;
 	}
 
 	public GameObject lookTileSelectionObj;
@@ -76,6 +81,8 @@ public class GameControllerScript : MonoBehaviour {
 	public int currentUnitIndex = 0;
 	public List<Unit> unitsList;
 
+	public List<GameObject> possibleMovesObjsList;
+
 	public GameFlowState currentGameState = GameFlowState.DELAY_FOR_NEXT_MOVE;
 
 	public static GameControllerScript Instance;
@@ -89,11 +96,15 @@ public class GameControllerScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+		possibleMovesObjsList = new List<GameObject> ();
+
 		InitTilesArray ();
 
 		//OnTeleSelectionStart ();
 		//OnTeleSelectionUpdate(transform.position + new Vector3(1.56f, 0, 1.80f));
 	}
+
+
 
 	void Update()
 	{
@@ -115,6 +126,14 @@ public class GameControllerScript : MonoBehaviour {
 		if (currentUnitIndex >= unitsList.Count)
 			currentUnitIndex = 0;
 
+		while (unitsList [currentUnitIndex] == null)
+		{
+			unitsList.RemoveAt (currentUnitIndex);
+			if (currentUnitIndex >= unitsList.Count)
+				currentUnitIndex = 0;
+		}
+
+		unitsList [currentUnitIndex].movesRemaining = unitsList [currentUnitIndex].moveSpeed;
 		unitsList [currentUnitIndex].MoveStart ();
 
 		if (currPlayerHighlightObj != null)
@@ -124,6 +143,36 @@ public class GameControllerScript : MonoBehaviour {
 		}
 	}
 
+	public void DisplayPossibleMoves(Unit who)
+	{
+		StopDisplayingMoves ();
+
+		if (possibleMovePrefab == null)
+			return;
+
+		int iterY = 0;
+
+		for (int iterX = 0; iterX < mapSize.x; iterX++)
+		{
+			for (int iterZ = 0; iterZ < mapSize.z; iterZ++)
+			{
+				if (tilesMap [iterX, iterY, iterZ].type == TileType.EMPTY && GetMoveDistToTargetTile (who.gridPos, new Vector3 (iterX, iterY, iterZ)) <= who.movesRemaining)
+				{
+					GameObject newObj = Instantiate (possibleMovePrefab, GridToWorldPos(new Vector3(iterX, iterY, iterZ)), transform.rotation, transform);
+					possibleMovesObjsList.Add (newObj);
+				}
+			}
+		}
+	}
+
+	public void StopDisplayingMoves()
+	{
+		for (int i = 0; i < possibleMovesObjsList.Count; i++)
+			Destroy (possibleMovesObjsList [i]);
+
+		possibleMovesObjsList.Clear ();
+	}
+
 	public void MoveEnd(Unit who)
 	{
 		if (unitsList.Contains (who) == false)
@@ -131,11 +180,13 @@ public class GameControllerScript : MonoBehaviour {
 
 		if (unitsList [currentUnitIndex] == who)
 		{
+			StopDisplayingMoves ();
+
 			currentUnitIndex += 1;
 			if (currentUnitIndex >= unitsList.Count)
 				currentUnitIndex = 0;
 
-			moveDelayTimer = moveDelayTimer;
+			moveDelayTimer = delayBetweenMoves;
 
 			currentGameState = GameFlowState.DELAY_FOR_NEXT_MOVE;
 
@@ -161,7 +212,8 @@ public class GameControllerScript : MonoBehaviour {
 		Vector3 returnVal;
 
 		returnVal.x = localPos.x / tileSize.x;
-		returnVal.y = localPos.y / tileSize.y;
+		//returnVal.y = localPos.y / tileSize.y;
+		returnVal.y = 0;
 		returnVal.z = localPos.z / tileSize.z;
 
 		returnVal.x = Mathf.Floor (returnVal.x);
@@ -229,10 +281,6 @@ public class GameControllerScript : MonoBehaviour {
 		PlayerChangedWorldPos (transform.TransformPoint (localPos));
 	}
 
-	public void OnTeleportApply()
-	{
-		
-	}
 
 	public CanMoveResponse IWannaMoveWorldPos(Vector3 worldPos, Unit movingUnit)
 	{
@@ -254,6 +302,14 @@ public class GameControllerScript : MonoBehaviour {
 			return responseObj;
 		}
 
+		if (gridPos.x < 0 || gridPos.y < 0 || gridPos.z < 0 ||
+			gridPos.x >= mapSize.x || gridPos.y >= mapSize.y || gridPos.z >= mapSize.z ||
+			tilesMap[(int)gridPos.x, (int)gridPos.y, (int)gridPos.z].type != TileType.EMPTY)
+		{
+			responseObj.canMove = false;
+			return responseObj;
+		}
+
 		responseObj.spacesMoved = 1;
 		responseObj.canMove = true;
 
@@ -263,6 +319,35 @@ public class GameControllerScript : MonoBehaviour {
 
 		return responseObj;
 
+	}
+
+	public void IJustMovedWorldPos(Vector3 worldPos, Unit movingUnit)
+	{
+		IJustMovedLocalPos (transform.InverseTransformPoint(worldPos), movingUnit);
+	}
+
+	public void IJustMovedLocalPos(Vector3 localPos, Unit movingUnit)
+	{
+		IJustMovedGridPos(LocalPosToGridPos(localPos), movingUnit);
+	}
+
+	public void IJustMovedGridPos(Vector3 gridPos, Unit movingUnit)
+	{
+		if (unitsList.Contains (movingUnit) == false || unitsList [currentUnitIndex] != movingUnit)
+			return;
+
+		if (currPlayerHighlightObj != null)
+		{
+			currPlayerHighlightObj.SetActive (true);
+			currPlayerHighlightObj.transform.position = movingUnit.transform.position;
+		}
+
+		movingUnit.gridPos = gridPos;
+	}
+
+	public int GetMoveDistToTargetTile(Vector3 fromGridPos, Vector3 toGridPos)
+	{
+		return GetMovePosesToTargetTile (fromGridPos, toGridPos).Count;
 	}
 
 	public List<Vector3> GetMovePosesToTargetTile(Vector3 fromGridPos, Vector3 toGridPos)
@@ -408,7 +493,7 @@ public class GameControllerScript : MonoBehaviour {
 		return valueGrid [(int)markPos.x, (int)markPos.y, (int)markPos.z];
 	}
 
-	public TileData RayCastToTileData(RaycastHit hit)
+	public TileData RayCastToTileData(RaycastHit hit, Vector3 gridPos)
 	{
 		TileData returnVal = new TileData ();
 
@@ -429,6 +514,9 @@ public class GameControllerScript : MonoBehaviour {
 		if (unitScript != null)
 		{
 			returnVal.unitRef = unitScript;
+
+			returnVal.unitRef.gridPos = gridPos;
+			returnVal.unitRef.movesRemaining = 0;
 			returnVal.type = TileType.UNIT;
 		}
 
@@ -456,7 +544,7 @@ public class GameControllerScript : MonoBehaviour {
 
 					if (Physics.BoxCast (checkPos + Vector3.up * 1.5f, colliderSize, Vector3.down, out hit, transform.rotation, 1))
 					{
-						tilesMap [iterX, iterY, iterZ] = RayCastToTileData (hit);
+						tilesMap [iterX, iterY, iterZ] = RayCastToTileData (hit, new Vector3(iterX, iterY, iterZ));
 
 						if (tilesMap [iterX, iterY, iterZ].unitRef != null)
 							unitsList.Add (tilesMap [iterX, iterY, iterZ].unitRef);
