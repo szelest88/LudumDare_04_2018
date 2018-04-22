@@ -87,6 +87,9 @@ public class GameControllerScript : MonoBehaviour {
 	void Start () {
 
 		InitTilesArray ();
+
+		//OnTeleSelectionStart ();
+		//OnTeleSelectionUpdate(transform.position + new Vector3(1.56f, 0, 1.80f));
 	}
 
 	void Update()
@@ -146,6 +149,10 @@ public class GameControllerScript : MonoBehaviour {
 		returnVal.x = localPos.x / tileSize.x;
 		returnVal.y = localPos.y / tileSize.y;
 		returnVal.z = localPos.z / tileSize.z;
+
+		returnVal.x = Mathf.Floor (returnVal.x);
+		returnVal.y = Mathf.Floor (returnVal.y);
+		returnVal.z = Mathf.Floor (returnVal.z);
 
 		return returnVal;
 	}
