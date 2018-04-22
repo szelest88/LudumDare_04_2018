@@ -259,7 +259,7 @@ public class GameControllerScript : MonoBehaviour {
 
 		responseObj.targetGridPos = gridPos;
 		responseObj.targetLocalPos = GridToWorldPos (responseObj.targetGridPos);
-		responseObj.targetLocalPos = transform.InverseTransformPoint (responseObj.targetLocalPos);
+		responseObj.targetWorldPos = transform.InverseTransformPoint (responseObj.targetLocalPos);
 
 		return responseObj;
 
