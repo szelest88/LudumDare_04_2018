@@ -24,6 +24,9 @@ public abstract class Unit : MonoBehaviour
                 if (!(this is Player))
                 {
                     gameObject.SetActive(false);
+                } else
+                {
+                    GetComponentInChildren<ParticleSystem>().Play();
                 }
             }
         }
