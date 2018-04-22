@@ -11,6 +11,7 @@ public class BlasterProjectile : Projectile
         {
             dealDamage(projectileDamage, collision.gameObject);
             gameObject.SetActive(false);
+            collision.gameObject.GetComponentInChildren<ParticleSystem>().Play();
         }
     }
 }
