@@ -59,6 +59,9 @@ public class GameControllerScript : MonoBehaviour {
 
 	public GameObject possibleMovePrefab;
 
+	public List<GameObject> onGameEndObjs;
+	public Unit playerUnitScript;
+
 	/// <summary>
 	/// Defines, how far the manager will look for when initing the game field array.
 	/// The manager looks only forward in each axis.
@@ -88,6 +91,8 @@ public class GameControllerScript : MonoBehaviour {
 	public List<GameObject> possibleMovesObjsList;
 
 	public GameFlowState currentGameState = GameFlowState.DELAY_FOR_NEXT_MOVE;
+
+	public bool gameEnded = false;
 
 	public static GameControllerScript Instance;
 
@@ -121,6 +126,15 @@ public class GameControllerScript : MonoBehaviour {
 
 			if (moveDelayTimer <= 0)
 			{
+				if (gameEnded == false && ((unitsList.Count == 1 && unitsList [0] == playerUnitScript) || unitsList.Count <= 0))
+				{
+					gameEnded = true;
+
+					for (int i = 0; i < onGameEndObjs.Count; i++)
+						if (onGameEndObjs [i] != null)
+							onGameEndObjs [i].SetActive (true);
+				}
+
 				currentGameState = GameFlowState.WAITING_FOR_UNIT;
 				NextMove ();
 			}
@@ -376,6 +390,29 @@ public class GameControllerScript : MonoBehaviour {
 	public void PlayerChangedLocalPos(Vector3 localPos)
 	{
 		PlayerChangedWorldPos (transform.TransformPoint (localPos));
+	}
+
+
+	public void IJustDied(Unit who)
+	{
+		if (unitsList.Contains(who))
+		{
+			if (currentUnitIndex >= unitsList.IndexOf (who))
+				currentUnitIndex -= 1;
+			
+			unitsList.Remove (who);
+		}
+
+		Vector3 gridPos = GetUnitPos (movingUnit);
+
+		if (gridPos.x > -1)
+		{
+
+			tilesMap [(int)gridPos.x, (int)gridPos.y, (int)gridPos.z].type = TileType.EMPTY;
+			tilesMap [(int)gridPos.x, (int)gridPos.y, (int)gridPos.z].objRef = null;
+			tilesMap [(int)gridPos.x, (int)gridPos.y, (int)gridPos.z].unitRef = null;
+		}
+
 	}
 
 
