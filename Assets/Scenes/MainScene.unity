@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -740,39 +740,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4231017499264852, guid: 7672ae2136c73394b962edbed6758e9a,
     type: 2}
   m_PrefabInternal: {fileID: 430781049}
---- !u!21 &456210149
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - PixelSnap: 0
-    - _EnableExternalAlpha: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &483567872
 Prefab:
   m_ObjectHideFlags: 0
@@ -1106,7 +1073,7 @@ Transform:
   m_PrefabParentObject: {fileID: 4231017499264852, guid: 7672ae2136c73394b962edbed6758e9a,
     type: 2}
   m_PrefabInternal: {fileID: 526768739}
---- !u!43 &623556980
+--- !u!43 &529081094
 Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -1762,15 +1729,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4018204085586440, guid: f580a8546fbebfd408f61f11aa2e3755, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 3.9097605
+      value: 3.82
       objectReference: {fileID: 0}
     - target: {fileID: 4018204085586440, guid: f580a8546fbebfd408f61f11aa2e3755, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.013000011
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4018204085586440, guid: f580a8546fbebfd408f61f11aa2e3755, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 1.9714135
+      value: 0.768
       objectReference: {fileID: 0}
     - target: {fileID: 4018204085586440, guid: f580a8546fbebfd408f61f11aa2e3755, type: 2}
       propertyPath: m_LocalRotation.x
@@ -1790,17 +1757,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4018204085586440, guid: f580a8546fbebfd408f61f11aa2e3755, type: 2}
       propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114546578110121910, guid: f580a8546fbebfd408f61f11aa2e3755,
-        type: 2}
-      propertyPath: projectileObjectPool
-      value: 
-      objectReference: {fileID: 1046263749}
-    - target: {fileID: 114546578110121910, guid: f580a8546fbebfd408f61f11aa2e3755,
-        type: 2}
-      propertyPath: movesRemaining
-      value: 20
+      value: 37
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f580a8546fbebfd408f61f11aa2e3755, type: 2}
@@ -1810,26 +1767,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4018204085586440, guid: f580a8546fbebfd408f61f11aa2e3755,
     type: 2}
   m_PrefabInternal: {fileID: 1046263746}
---- !u!1 &1046263748 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1275960278204562, guid: f580a8546fbebfd408f61f11aa2e3755,
-    type: 2}
-  m_PrefabInternal: {fileID: 1046263746}
---- !u!114 &1046263749
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1046263748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 568fe34a01d252045833b5f95340e065, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pooledObject: {fileID: 1455101006224046, guid: c09807c992ebb0e47a347f216d88c9f8,
-    type: 2}
-  numberOfObjects: 10
-  pooledObjects: []
 --- !u!1001 &1079274077
 Prefab:
   m_ObjectHideFlags: 0
@@ -2591,6 +2528,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: -1
   origin: {fileID: 0}
+--- !u!21 &1648868969
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - PixelSnap: 0
+    - _EnableExternalAlpha: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1656184904 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1259339849304568, guid: 34544fb53b9b42f4188e6055f6b62935,
@@ -3054,7 +3024,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1991071418}
-  - {fileID: 1046263747}
   - {fileID: 298605521}
   - {fileID: 843874455}
   - {fileID: 779811688}
@@ -3091,6 +3060,7 @@ Transform:
   - {fileID: 1753491360}
   - {fileID: 1949456377}
   - {fileID: 1656184905}
+  - {fileID: 1046263747}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3222,7 +3192,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1931792452}
-  m_Mesh: {fileID: 623556980}
+  m_Mesh: {fileID: 529081094}
 --- !u!23 &1931792456
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3238,7 +3208,7 @@ MeshRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 456210149}
+  - {fileID: 1648868969}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
