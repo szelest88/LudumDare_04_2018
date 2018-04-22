@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Player : Unit
 {
-    enum PlayerState
+    public enum PlayerState
     {
         TELEPORTING,
         SHOOTING,
         IDLE
     };
 
-    enum PlayerEvent
+    public enum PlayerEvent
     {
         ENTER,
         EXIT,
@@ -22,7 +22,7 @@ public class Player : Unit
     }
 
 
-    PlayerState playerState;
+    public PlayerState playerState;
 
 
     public ParabolicPointer parabolicPointer;
@@ -84,8 +84,7 @@ public class Player : Unit
                 switch (playerEvent)
                 {
                     case PlayerEvent.MOVE_START:
-                        //return PlayerState.TELEPORTING;
-                        return PlayerState.SHOOTING;
+                        return PlayerState.TELEPORTING;
                 }
                 break;
 
@@ -93,18 +92,14 @@ public class Player : Unit
                 switch (playerEvent)
                 {
                     case PlayerEvent.ENTER:
+                        parabolicPointer.enabled = true;
                         break;
 
                     case PlayerEvent.EXIT:
                         parabolicPointer.enabled = false;
                         break;
 
-                    case PlayerEvent.TRIGGER_START:
-                        parabolicPointer.enabled = true;
-                        break;
-
                     case PlayerEvent.TRIGGER_END:
-                        parabolicPointer.enabled = false;
                         var pointerPos = parabolicPointer.GetPosition();
                         if (pointerPos != null)
                         {
