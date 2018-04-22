@@ -482,7 +482,6 @@ MonoBehaviour:
   gridPos: {x: 0, y: 0, z: 0}
   projectileObjectPool: {fileID: 114096062676916214}
   playerState: 0
-  moveSpeed: 3
 --- !u!135 &135461915150428674
 SphereCollider:
   m_ObjectHideFlags: 1

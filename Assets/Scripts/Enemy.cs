@@ -23,8 +23,7 @@ public class Enemy : Unit {
     public ObjectPool projectileObjectPool;
 
     public PlayerState playerState;
-
-    public float moveSpeed = 0.5f;
+    
 
 
     // Use this for initialization
