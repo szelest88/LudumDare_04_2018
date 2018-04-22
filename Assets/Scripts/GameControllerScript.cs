@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class GameControllerScript : MonoBehaviour {
 
@@ -111,6 +112,9 @@ public class GameControllerScript : MonoBehaviour {
 
 	void Update()
 	{
+		if (Input.GetKeyDown(KeyCode.P))
+			SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+
 		if (currentGameState == GameFlowState.DELAY_FOR_NEXT_MOVE)
 		{
 			moveDelayTimer -= Time.deltaTime;
