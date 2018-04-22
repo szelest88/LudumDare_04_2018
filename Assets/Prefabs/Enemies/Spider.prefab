@@ -153,7 +153,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1463030109190056}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.99, y: 0, z: 0}
+  m_LocalPosition: {x: -7.360036, y: 3.6421776, z: -1.4301848}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4095018591087620}
@@ -438,6 +438,7 @@ MonoBehaviour:
   gridPos: {x: 0, y: 0, z: 0}
   projectileObjectPool: {fileID: 0}
   playerState: 0
+  moveSpeed: 3
 --- !u!135 &135211743581548644
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -549,7 +550,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 801110965
+  randomSeed: 2103150709
   InitialModule:
     serializedVersion: 3
     enabled: 1
