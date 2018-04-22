@@ -47,11 +47,14 @@ public class GameControllerScript : MonoBehaviour {
 		///  List of points in world orient, that the object should follow to get to the end pos.
 		/// </summary>
 		public List<Vector3> movePathWorldPos;
+
+		public List<Vector3> movePathGridPos;
 	}
 
 	public GameObject lookTileSelectionObj;
 	public GameObject playerTileWallObj;
 	public GameObject currPlayerHighlightObj;
+	public GameObject playerWallObj;
 
 	public GameObject possibleMovePrefab;
 
@@ -145,6 +148,18 @@ public class GameControllerScript : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Should be called only when the unit controlled by player gets moved.
+	/// </summary>
+	public void PlayerUnitMoved(Unit who)
+	{
+		if (playerWallObj != null)
+		{
+			playerWallObj.SetActive (true);
+			playerWallObj.transform.position = who.transform.position;
+		}
+	}
+
 	public void DisplayPossibleMoves(Unit who)
 	{
 		StopDisplayingMoves ();
@@ -152,18 +167,26 @@ public class GameControllerScript : MonoBehaviour {
 		if (possibleMovePrefab == null)
 			return;
 
-		int iterY = 0;
+//		int iterY = 0;
+//
+//		for (int iterX = 0; iterX < mapSize.x; iterX++)
+//		{
+//			for (int iterZ = 0; iterZ < mapSize.z; iterZ++)
+//			{
+//				if (tilesMap [iterX, iterY, iterZ].type == TileType.EMPTY && GetMoveDistToTargetTile (who.gridPos, new Vector3 (iterX, iterY, iterZ)) <= who.movesRemaining)
+//				{
+//					GameObject newObj = Instantiate (possibleMovePrefab, GridToWorldPos(new Vector3(iterX, iterY, iterZ)), transform.rotation, transform);
+//					possibleMovesObjsList.Add (newObj);
+//				}
+//			}
+//		}
 
-		for (int iterX = 0; iterX < mapSize.x; iterX++)
+		List<Vector3> WorldPosList = WhereCanIMoveWorldPos (who);
+
+		for (int i = 0; i < WorldPosList.Count; i++)
 		{
-			for (int iterZ = 0; iterZ < mapSize.z; iterZ++)
-			{
-				if (tilesMap [iterX, iterY, iterZ].type == TileType.EMPTY && GetMoveDistToTargetTile (who.gridPos, new Vector3 (iterX, iterY, iterZ)) <= who.movesRemaining)
-				{
-					GameObject newObj = Instantiate (possibleMovePrefab, GridToWorldPos(new Vector3(iterX, iterY, iterZ)), transform.rotation, transform);
-					possibleMovesObjsList.Add (newObj);
-				}
-			}
+			GameObject newObj = Instantiate (possibleMovePrefab, WorldPosList[i], transform.rotation, transform);
+			possibleMovesObjsList.Add (newObj);
 		}
 	}
 
@@ -234,6 +257,35 @@ public class GameControllerScript : MonoBehaviour {
 		return returnVal;
 	}
 
+	public List<Vector3> WhereCanIMoveWorldPos(Unit who)
+	{
+		List<Vector3> returnList = WhereCanIMoveGridPos(who);
+
+		for (int i = 0; i < returnList.Count; i++)
+			returnList [i] = GridToWorldPos (returnList [i]);
+
+		return returnList;
+	}
+
+	public List<Vector3> WhereCanIMoveGridPos(Unit who)
+	{
+		List<Vector3> returnList = new List<Vector3> ();
+
+		int iterY = 0;
+
+		for (int iterX = 0; iterX < mapSize.x; iterX++)
+		{
+			for (int iterZ = 0; iterZ < mapSize.z; iterZ++)
+			{
+				if (tilesMap [iterX, iterY, iterZ].type == TileType.EMPTY && GetMoveDistToTargetTile (who.gridPos, new Vector3 (iterX, iterY, iterZ)) <= who.movesRemaining)
+				{
+					returnList.Add (new Vector3(iterX, iterY, iterZ));
+				}
+			}
+		}
+
+		return returnList;
+	}
 
 	public Vector3 MultVec3(Vector3 vec1, Vector3 vec2)
 	{
@@ -347,6 +399,13 @@ public class GameControllerScript : MonoBehaviour {
 		responseObj.targetGridPos = gridPos;
 		responseObj.targetLocalPos = GridToWorldPos (responseObj.targetGridPos);
 		responseObj.targetWorldPos = transform.InverseTransformPoint (responseObj.targetLocalPos);
+
+		responseObj.movePathGridPos = posesList;
+
+		responseObj.movePathWorldPos = new List<Vector3> ();
+
+		for (int i = 0; i < responseObj.movePathGridPos.Count; i++)
+			responseObj.movePathWorldPos.Add (GridToWorldPos(responseObj.movePathGridPos[i]));
 
 		return responseObj;
 

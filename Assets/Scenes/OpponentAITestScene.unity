@@ -309,7 +309,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4231017499264852, guid: 7672ae2136c73394b962edbed6758e9a, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4231017499264852, guid: 7672ae2136c73394b962edbed6758e9a, type: 2}
       propertyPath: m_LocalRotation.x
@@ -1560,6 +1560,7 @@ MonoBehaviour:
   lookTileSelectionObj: {fileID: 2133096355}
   playerTileWallObj: {fileID: 570950545}
   currPlayerHighlightObj: {fileID: 51865605}
+  playerWallObj: {fileID: 570950545}
   possibleMovePrefab: {fileID: 1177453085467934, guid: 31387376d1dea514db969de0ea52c485,
     type: 2}
   mapSize: {x: 10, y: 1, z: 10}
@@ -2179,7 +2180,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4231017499264852, guid: 7672ae2136c73394b962edbed6758e9a, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 2
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4231017499264852, guid: 7672ae2136c73394b962edbed6758e9a, type: 2}
       propertyPath: m_LocalRotation.x
@@ -3248,6 +3249,11 @@ Prefab:
     - target: {fileID: 4988655598945258, guid: 28abf8d3175c2f149b4e37e8d1bcc567, type: 2}
       propertyPath: m_RootOrder
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114166969280791172, guid: 28abf8d3175c2f149b4e37e8d1bcc567,
+        type: 2}
+      propertyPath: moveSpeed
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114187019151917192, guid: 28abf8d3175c2f149b4e37e8d1bcc567, type: 2}
