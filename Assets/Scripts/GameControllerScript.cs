@@ -403,7 +403,7 @@ public class GameControllerScript : MonoBehaviour {
 			unitsList.Remove (who);
 		}
 
-		Vector3 gridPos = GetUnitPos (movingUnit);
+		Vector3 gridPos = GetUnitPos (who);
 
 		if (gridPos.x > -1)
 		{
