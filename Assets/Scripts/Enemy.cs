@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : Unit
-{
+public class Enemy : Unit {
+
     public enum PlayerState
     {
         IDLE,
@@ -16,18 +16,13 @@ public class Player : Unit
         ENTER,
         EXIT,
         MOVE_START,
-        TRIGGER_START,
-        TRIGGER_END,
         TIMEOUT,
     }
 
+    public ObjectPool projectileObjectPool;
 
     public PlayerState playerState;
 
-
-    public ParabolicPointer parabolicPointer;
-    public GameObject gun;
-    public Coroutine timeoutCoroutine;
 
     // Use this for initialization
     void Start()
@@ -35,24 +30,9 @@ public class Player : Unit
         init(PlayerState.IDLE);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-    
     public override void MoveStart()
     {
         process(PlayerEvent.MOVE_START);
-    }
-
-    public void OnTriggerStart()
-    {
-        process(PlayerEvent.TRIGGER_START);
-    }
-    public void OnTriggerEnd()
-    {
-        process(PlayerEvent.TRIGGER_END);
     }
 
     void init(PlayerState state)
@@ -60,7 +40,6 @@ public class Player : Unit
         playerState = state;
         processEvent(state, PlayerEvent.ENTER);
     }
-
 
     void process(PlayerEvent playerEvent)
     {
@@ -92,25 +71,9 @@ public class Player : Unit
                 switch (playerEvent)
                 {
                     case PlayerEvent.ENTER:
-                        parabolicPointer.enabled = true;
-                        break;
+                        return PlayerState.SHOOTING;
 
                     case PlayerEvent.EXIT:
-                        parabolicPointer.enabled = false;
-                        break;
-
-                    case PlayerEvent.TRIGGER_END:
-                        var pointerPos = parabolicPointer.GetPosition();
-                        if (pointerPos != null)
-                        {
-                            var response = GameControllerScript.Instance.IWannaMoveWorldPos(pointerPos.Value, this);
-                            if (response.canMove)
-                            {
-                                transform.position = response.targetWorldPos;
-                                GameControllerScript.Instance.IJustMovedGridPos(transform.position, this);
-                                return PlayerState.SHOOTING;
-                            }
-                        }
                         break;
                 }
                 break;
@@ -119,19 +82,10 @@ public class Player : Unit
                 switch (playerEvent)
                 {
                     case PlayerEvent.ENTER:
-                        gun.SetActive(true);
+                        Shoot();
                         break;
 
                     case PlayerEvent.EXIT:
-                        gun.SetActive(false);
-                        break;
-
-                    case PlayerEvent.TRIGGER_START:
-                        if (timeoutCoroutine == null && transform.GetComponentInChildren<Blaster>().weaponCooldown.canUse)
-                        {
-                            transform.GetComponentInChildren<Blaster>().Shoot();
-                            timeoutCoroutine = StartCoroutine(WaitForTurnEnd());
-                        }
                         break;
 
                     case PlayerEvent.TIMEOUT:
@@ -144,10 +98,26 @@ public class Player : Unit
         return null;
     }
 
+    private void Shoot()
+    {
+        var player = GameObject.FindGameObjectWithTag("Player");
+
+        Vector3 direction = player.transform.position - transform.position;
+        GameObject projectileObject = projectileObjectPool.PoolNext(transform.position);
+        projectileObject.GetComponent<EnemyBullet>().startProjectileMovement(direction);
+
+        foreach (var playerCollider in GetComponentsInChildren<Collider>())
+        {
+            Physics.IgnoreCollision(playerCollider, projectileObject.GetComponent<Collider>());
+        }
+        Debug.Log("chuj");
+
+        StartCoroutine(WaitForTurnEnd());
+    }
+
     public IEnumerator WaitForTurnEnd()
     {
         yield return new WaitForSeconds(1f);
-        timeoutCoroutine = null;
         process(PlayerEvent.TIMEOUT);
     }
 }

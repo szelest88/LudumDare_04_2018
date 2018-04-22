@@ -36,14 +36,6 @@ public abstract class Unit : MonoBehaviour
 
 	public Vector3 gridPos;
 
-
-    // Use this for initialization
-    void Start ()
-    {
-		
-	}
-
-
 	/// <summary>
 	/// Called by game manager, when it's time for this unit to move.
 	/// </summary>

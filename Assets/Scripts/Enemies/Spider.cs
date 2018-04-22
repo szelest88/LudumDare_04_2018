@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spider : Unit
+public class Spider : Enemy
 {
 
 	// Use this for initialization

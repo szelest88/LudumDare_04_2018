@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Soldier : Unit
+public class Soldier : Enemy
 {
 
 	// Use this for initialization
