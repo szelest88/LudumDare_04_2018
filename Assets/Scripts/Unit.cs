@@ -34,6 +34,9 @@ public abstract class Unit : MonoBehaviour
 	public int movesRemaining;
 
 
+	public Vector3 gridPos;
+
+
     // Use this for initialization
     void Start ()
     {

@@ -89,6 +89,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4988655598945258}
   - component: {fileID: 114187019151917192}
+  - component: {fileID: 114166969280791172}
   m_Layer: 0
   m_Name: TestOpponentObj
   m_TagString: Enemy
@@ -288,6 +289,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1049044208779790}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114166969280791172
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1610671042572478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b4525726042d6b4297f5f1309f4368e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 0
+  moveSpeed: 3
+  movesRemaining: 0
+  gridPos: {x: 0, y: 0, z: 0}
 --- !u!114 &114187019151917192
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -300,6 +316,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 3
+  moveSpeed: 3
+  movesRemaining: 0
+  gridPos: {x: 0, y: 0, z: 0}
 --- !u!135 &135802937833121186
 SphereCollider:
   m_ObjectHideFlags: 1

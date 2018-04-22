@@ -1554,6 +1554,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lookTileSelectionObj: {fileID: 2133096355}
   playerTileWallObj: {fileID: 570950545}
+  currPlayerHighlightObj: {fileID: 0}
+  possibleMovePrefab: {fileID: 0}
   mapSize: {x: 10, y: 1, z: 10}
   tileSize: {x: 1, y: 1, z: 1}
   firstTileOffset: {x: 0, y: 0, z: 0}
@@ -1561,6 +1563,7 @@ MonoBehaviour:
   moveDelayTimer: 1
   currentUnitIndex: 0
   unitsList: []
+  possibleMovesObjsList: []
   currentGameState: 0
 --- !u!1001 &1026853006
 Prefab:
@@ -3133,6 +3136,23 @@ Transform:
   m_PrefabParentObject: {fileID: 4291730179631172, guid: 96ef3078ba58cf247adffba89de44cab,
     type: 2}
   m_PrefabInternal: {fileID: 1889402285}
+--- !u!1 &1942480076 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1610671042572478, guid: 28abf8d3175c2f149b4e37e8d1bcc567,
+    type: 2}
+  m_PrefabInternal: {fileID: 2067897492}
+--- !u!65 &1942480077
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1942480076}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 0.5, z: 0.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2030812828
 Prefab:
   m_ObjectHideFlags: 0
@@ -3223,7 +3243,8 @@ Prefab:
       propertyPath: m_RootOrder
       value: 50
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114187019151917192, guid: 28abf8d3175c2f149b4e37e8d1bcc567, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 28abf8d3175c2f149b4e37e8d1bcc567, type: 2}
   m_IsPrefabParent: 0
 --- !u!1001 &2119249904
