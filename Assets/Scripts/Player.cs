@@ -6,9 +6,9 @@ public class Player : Unit
 {
     public enum PlayerState
     {
+        IDLE,
         TELEPORTING,
         SHOOTING,
-        IDLE
     };
 
     public enum PlayerEvent
@@ -26,7 +26,7 @@ public class Player : Unit
 
 
     public ParabolicPointer parabolicPointer;
-    public GameObject blaster;
+    public GameObject gun;
     public Coroutine timeoutCoroutine;
 
     // Use this for initialization
@@ -66,13 +66,13 @@ public class Player : Unit
     {
         var newState = processEvent(playerState, playerEvent);
 
-        if (newState != null)
+        while (newState != null)
         {
             processEvent(playerState, PlayerEvent.EXIT);
 
             playerState = newState.Value;
 
-            processEvent(playerState, PlayerEvent.ENTER);
+            newState = processEvent(playerState, PlayerEvent.ENTER);
         }
     }
 
@@ -118,11 +118,11 @@ public class Player : Unit
                 switch (playerEvent)
                 {
                     case PlayerEvent.ENTER:
-                        blaster.SetActive(true);
+                        gun.SetActive(true);
                         break;
 
                     case PlayerEvent.EXIT:
-                        blaster.SetActive(false);
+                        gun.SetActive(false);
                         break;
 
                     case PlayerEvent.TRIGGER_START:

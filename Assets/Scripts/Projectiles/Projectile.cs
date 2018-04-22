@@ -25,6 +25,7 @@ public abstract class Projectile : MonoBehaviour
     public void dealDamage(float damage, GameObject affectedObject)
     {
         affectedObject.GetComponentInParent<Unit>().Health -= projectileDamage;
+
     }
 
 
