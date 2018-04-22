@@ -107,6 +107,7 @@ public class Player : Unit
                             if (response.canMove)
                             {
                                 transform.position = response.targetWorldPos;
+                                GameControllerScript.Instance.IJustMovedGridPos(transform.position, this);
                                 return PlayerState.SHOOTING;
                             }
                         }
