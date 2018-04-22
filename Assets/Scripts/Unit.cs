@@ -19,7 +19,13 @@ public abstract class Unit : MonoBehaviour
         set
         {
             health = value;
-            if (health <= 0) gameObject.SetActive(false);
+            if (health <= 0) {
+                GameControllerScript.Instance.IJustDied(this);
+                if (!(this is Player))
+                {
+                    gameObject.SetActive(false);
+                }
+            }
         }
     }
 
