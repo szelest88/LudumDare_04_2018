@@ -1190,7 +1190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 3
-  moveSpeed: 3
+  moveSpeed: 4
   movesRemaining: 20
   gridPos: {x: 0, y: 0, z: 0}
   playerState: 0
