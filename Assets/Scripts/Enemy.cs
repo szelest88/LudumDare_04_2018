@@ -71,6 +71,12 @@ public class Enemy : Unit {
                 switch (playerEvent)
                 {
                     case PlayerEvent.ENTER:
+                        var possibleMoves = GameControllerScript.Instance.WhereCanIMoveWorldPos(this);
+                        var idx = UnityEngine.Random.Range(0, possibleMoves.Count);
+                        transform.position = possibleMoves[idx];
+                        var response = GameControllerScript.Instance.IWannaMoveWorldPos(transform.position, this);
+                        //response.movePathWorldPos
+                        GameControllerScript.Instance.IJustMovedWorldPos(transform.position, this);
                         return PlayerState.SHOOTING;
 
                     case PlayerEvent.EXIT:

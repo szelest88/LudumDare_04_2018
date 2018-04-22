@@ -84,6 +84,10 @@ public class Player : Unit
             case PlayerState.IDLE:
                 switch (playerEvent)
                 {
+                    case PlayerEvent.ENTER:
+                        GameControllerScript.Instance.PlayerChangedWorldPos(transform.position);
+                        break;
+
                     case PlayerEvent.MOVE_START:
                         return PlayerState.TELEPORTING;
                 }
@@ -111,6 +115,7 @@ public class Player : Unit
                             {
                                 transform.position = response.targetWorldPos;
                                 GameControllerScript.Instance.IJustMovedGridPos(transform.position, this);
+                                GameControllerScript.Instance.PlayerChangedWorldPos(transform.position);
                                 return PlayerState.SHOOTING;
                             }
                         }
