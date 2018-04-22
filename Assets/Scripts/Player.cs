@@ -26,6 +26,7 @@ public class Player : Unit
 
 
     public ParabolicPointer parabolicPointer;
+    public GameObject teleporter;
     public GameObject gun;
     public Coroutine timeoutCoroutine;
 
@@ -92,10 +93,12 @@ public class Player : Unit
                 switch (playerEvent)
                 {
                     case PlayerEvent.ENTER:
+                        teleporter.SetActive(true);
                         parabolicPointer.enabled = true;
                         break;
 
                     case PlayerEvent.EXIT:
+                        teleporter.SetActive(false);
                         parabolicPointer.enabled = false;
                         break;
 
