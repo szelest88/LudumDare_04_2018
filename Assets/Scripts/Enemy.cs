@@ -17,11 +17,14 @@ public class Enemy : Unit {
         EXIT,
         MOVE_START,
         TIMEOUT,
+        MOVE_ANIM_FINISHED
     }
 
     public ObjectPool projectileObjectPool;
 
     public PlayerState playerState;
+
+    public float moveSpeed = 0.5f;
 
 
     // Use this for initialization
@@ -73,14 +76,17 @@ public class Enemy : Unit {
                     case PlayerEvent.ENTER:
                         var possibleMoves = GameControllerScript.Instance.WhereCanIMoveWorldPos(this);
                         var idx = UnityEngine.Random.Range(0, possibleMoves.Count);
-                        transform.position = possibleMoves[idx];
-                        var response = GameControllerScript.Instance.IWannaMoveWorldPos(transform.position, this);
-                        //response.movePathWorldPos
-                        GameControllerScript.Instance.IJustMovedWorldPos(transform.position, this);
-                        return PlayerState.SHOOTING;
+                        var newPosition = possibleMoves[idx];
+
+                        var response = GameControllerScript.Instance.IWannaMoveWorldPos(newPosition, this);
+                        StartCoroutine(Move(newPosition, response.movePathWorldPos));
+                        break;
 
                     case PlayerEvent.EXIT:
                         break;
+
+                    case PlayerEvent.MOVE_ANIM_FINISHED:
+                        return PlayerState.SHOOTING;
                 }
                 break;
 
@@ -102,6 +108,33 @@ public class Enemy : Unit {
 
         }
         return null;
+    }
+
+    private IEnumerator Move(Vector3 newPosition, List<Vector3> positions)
+    {
+        var currentPos = transform.position;
+
+        foreach (var pos in positions)
+        {
+            yield return MoveFromTo(transform, currentPos, pos, moveSpeed);
+            currentPos = pos;
+        }
+
+        GameControllerScript.Instance.IJustMovedWorldPos(newPosition, this);
+        process(PlayerEvent.MOVE_ANIM_FINISHED);
+    }
+
+    IEnumerator MoveFromTo(Transform objectToMove, Vector3 a, Vector3 b, float speed)
+    {
+        float step = (speed / (a - b).magnitude) * Time.fixedDeltaTime;
+        float t = 0;
+        while (t <= 1.0f)
+        {
+            t += step; // Goes from 0 to 1, incrementing by step each time
+            objectToMove.position = Vector3.Lerp(a, b, t); // Move objectToMove closer to b
+            yield return new WaitForFixedUpdate();         // Leave the routine and return here in the next frame
+        }
+        objectToMove.position = b;
     }
 
     private void Shoot()
