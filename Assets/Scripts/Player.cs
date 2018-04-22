@@ -17,12 +17,18 @@ public class Player : Unit
         EXIT,
         MOVE_START,
         TRIGGER_START,
-        TRIGGER_END
+        TRIGGER_END,
+        TIMEOUT,
     }
+
+
     PlayerState playerState;
 
 
     public ParabolicPointer parabolicPointer;
+    public GameObject blaster;
+    public Coroutine timeoutCoroutine;
+
     // Use this for initialization
     void Start()
     {
@@ -78,7 +84,8 @@ public class Player : Unit
                 switch (playerEvent)
                 {
                     case PlayerEvent.MOVE_START:
-                        return PlayerState.TELEPORTING;
+                        //return PlayerState.TELEPORTING;
+                        return PlayerState.SHOOTING;
                 }
                 break;
 
@@ -93,18 +100,19 @@ public class Player : Unit
                         break;
 
                     case PlayerEvent.TRIGGER_START:
-
                         parabolicPointer.enabled = true;
                         break;
+
                     case PlayerEvent.TRIGGER_END:
                         parabolicPointer.enabled = false;
                         var pointerPos = parabolicPointer.GetPosition();
-                        if(pointerPos!=null)
+                        if (pointerPos != null)
                         {
                             var response = GameControllerScript.Instance.IWannaMoveWorldPos(pointerPos.Value, this);
                             if (response.canMove)
                             {
                                 transform.position = response.targetWorldPos;
+                                return PlayerState.SHOOTING;
                             }
                         }
                         break;
@@ -112,10 +120,38 @@ public class Player : Unit
                 break;
 
             case PlayerState.SHOOTING:
-                //TODO: implement
+                switch (playerEvent)
+                {
+                    case PlayerEvent.ENTER:
+                        blaster.SetActive(true);
+                        break;
+
+                    case PlayerEvent.EXIT:
+                        blaster.SetActive(false);
+                        break;
+
+                    case PlayerEvent.TRIGGER_START:
+                        if (timeoutCoroutine == null && transform.GetComponentInChildren<Blaster>().weaponCooldown.canUse)
+                        {
+                            transform.GetComponentInChildren<Blaster>().Shoot();
+                            timeoutCoroutine = StartCoroutine(WaitForTurnEnd());
+                        }
+                        break;
+
+                    case PlayerEvent.TIMEOUT:
+                        GameControllerScript.Instance.MoveEnd(this);
+                        return PlayerState.IDLE;
+                }
                 break;
 
         }
         return null;
+    }
+
+    public IEnumerator WaitForTurnEnd()
+    {
+        yield return new WaitForSeconds(1f);
+        timeoutCoroutine = null;
+        process(PlayerEvent.TIMEOUT);
     }
 }
