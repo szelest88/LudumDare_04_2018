@@ -62,6 +62,8 @@ public class GameControllerScript : MonoBehaviour {
 	public List<GameObject> onGameEndObjs;
 	public Unit playerUnitScript;
 
+	public List<GameObject> onPlayerLoseObjs;
+
 	/// <summary>
 	/// Defines, how far the manager will look for when initing the game field array.
 	/// The manager looks only forward in each axis.
@@ -120,21 +122,32 @@ public class GameControllerScript : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.P))
 			SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
 
+		// If player won:
+		if (gameEnded == false && ((unitsList.Count == 1 && unitsList [0] == playerUnitScript) || unitsList.Count <= 0))
+		{
+			gameEnded = true;
+
+			for (int i = 0; i < onGameEndObjs.Count; i++)
+				if (onGameEndObjs [i] != null)
+					onGameEndObjs [i].SetActive (true);
+		}
+
+		// If player lost:
+		if (gameEnded == false && playerUnitScript != null && unitsList.Contains (playerUnitScript) == false)
+		{
+			gameEnded = true;
+
+			for (int i = 0; i < onPlayerLoseObjs.Count; i++)
+				if (onPlayerLoseObjs [i] != null)
+					onPlayerLoseObjs [i].SetActive (true);
+		}
+
 		if (currentGameState == GameFlowState.DELAY_FOR_NEXT_MOVE)
 		{
 			moveDelayTimer -= Time.deltaTime;
 
 			if (moveDelayTimer <= 0)
 			{
-				if (gameEnded == false && ((unitsList.Count == 1 && unitsList [0] == playerUnitScript) || unitsList.Count <= 0))
-				{
-					gameEnded = true;
-
-					for (int i = 0; i < onGameEndObjs.Count; i++)
-						if (onGameEndObjs [i] != null)
-							onGameEndObjs [i].SetActive (true);
-				}
-
 				currentGameState = GameFlowState.WAITING_FOR_UNIT;
 				NextMove ();
 			}
