@@ -181,7 +181,7 @@ public class ParabolicPointer : MonoBehaviour {
 
     void OnEnable() {
         if (GameControllerScript.Instance) {
-            GameControllerScript.Instance.OnTeleSelectionStart();
+            GameControllerScript.Instance.OnTeleSelectionStart(GetComponentInParent<Player>());
         }
     }
 
@@ -225,7 +225,7 @@ public class ParabolicPointer : MonoBehaviour {
         {
             if (GameControllerScript.Instance)
             {
-                GameControllerScript.Instance.OnTeleSelectionUpdate(position.Value);
+                GameControllerScript.Instance.OnTeleSelectionUpdate(position.Value, GetComponentInParent<Player>());
             }
         }
     }
