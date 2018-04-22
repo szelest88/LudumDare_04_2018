@@ -523,6 +523,9 @@ public class GameControllerScript : MonoBehaviour {
 
 	public int GetMoveDistToTargetTile(Vector3 fromGridPos, Vector3 toGridPos)
 	{
+		if (fromGridPos == toGridPos)
+			return 0;
+
 		List<Vector3> posesList = GetMovePosesToTargetTile (fromGridPos, toGridPos);
 
 		if (posesList == null)
@@ -534,6 +537,9 @@ public class GameControllerScript : MonoBehaviour {
 	public List<Vector3> GetMovePosesToTargetTile(Vector3 fromGridPos, Vector3 toGridPos)
 	{
 		List<Vector3> returnList = new List<Vector3> ();
+
+		if (fromGridPos == toGridPos)
+			return returnList;
 
 		int gridHeight = (int)fromGridPos.y;
 
