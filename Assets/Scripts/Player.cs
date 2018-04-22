@@ -44,7 +44,10 @@ public class Player : Unit
     
     public override void MoveStart()
     {
-        process(PlayerEvent.MOVE_START);
+        if (Health > 0)
+        {
+            process(PlayerEvent.MOVE_START);
+        }
     }
 
     public void OnTriggerStart()

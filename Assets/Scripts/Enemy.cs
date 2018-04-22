@@ -35,7 +35,10 @@ public class Enemy : Unit {
 
     public override void MoveStart()
     {
-        process(PlayerEvent.MOVE_START);
+        if (Health > 0)
+        {
+            process(PlayerEvent.MOVE_START);
+        }
     }
 
     void init(PlayerState state)
