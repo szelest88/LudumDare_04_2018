@@ -46,6 +46,9 @@ public class GameControllerScript : MonoBehaviour {
 
 	public GameObject lookTileSelectionObj;
 	public GameObject playerTileWallObj;
+	public GameObject currPlayerHighlightObj;
+
+	public GameObject possibleMovePrefab;
 
 	/// <summary>
 	/// Defines, how far the manager will look for when initing the game field array.
@@ -113,6 +116,12 @@ public class GameControllerScript : MonoBehaviour {
 			currentUnitIndex = 0;
 
 		unitsList [currentUnitIndex].MoveStart ();
+
+		if (currPlayerHighlightObj != null)
+		{
+			currPlayerHighlightObj.SetActive (true);
+			currPlayerHighlightObj.transform.position = unitsList [currentUnitIndex].transform.position;
+		}
 	}
 
 	public void MoveEnd(Unit who)
@@ -129,6 +138,11 @@ public class GameControllerScript : MonoBehaviour {
 			moveDelayTimer = moveDelayTimer;
 
 			currentGameState = GameFlowState.DELAY_FOR_NEXT_MOVE;
+
+			if (currPlayerHighlightObj != null)
+			{
+				currPlayerHighlightObj.SetActive (false);
+			}
 		}
 	}
 
@@ -239,6 +253,10 @@ public class GameControllerScript : MonoBehaviour {
 			responseObj.canMove = false;
 			return responseObj;
 		}
+
+		responseObj.targetGridPos = gridPos;
+		responseObj.targetLocalPos = GridToWorldPos (responseObj.targetGridPos);
+		responseObj.targetLocalPos = transform.InverseTransformPoint (responseObj.targetLocalPos);
 
 		return responseObj;
 
