@@ -136,6 +136,8 @@ public class GameControllerScript : MonoBehaviour {
 		unitsList [currentUnitIndex].movesRemaining = unitsList [currentUnitIndex].moveSpeed;
 		unitsList [currentUnitIndex].MoveStart ();
 
+		//DisplayPossibleMoves (unitsList [currentUnitIndex]);
+
 		if (currPlayerHighlightObj != null)
 		{
 			currPlayerHighlightObj.SetActive (true);
@@ -248,23 +250,45 @@ public class GameControllerScript : MonoBehaviour {
 		return MultVec3 (source, multValue, multValue, multValue);
 	}
 
-	public void OnTeleSelectionStart()
+	public void OnTeleSelectionStart(Unit who = null)
 	{
 		if (lookTileSelectionObj != null)
 			lookTileSelectionObj.SetActive (true);
-		
+
+		if (who != null)
+			DisplayPossibleMoves (who);
 	}
 
-	public void OnTeleSelectionUpdate(Vector3 worldPos)
+	public void OnTeleSelectionUpdate(Vector3 worldPos, Unit who = null)
 	{
-		if (lookTileSelectionObj != null)
+		if (lookTileSelectionObj == null)
+			return;
+
+		if (who == null)
+		{
 			lookTileSelectionObj.transform.position = GridToWorldPos(WorldPosToGridPos(worldPos));
+		}
+		else
+		{
+			CanMoveResponse response = IWannaMoveWorldPos (worldPos, who);
+
+			if (response.canMove == false)
+				lookTileSelectionObj.SetActive (false);
+			else
+			{
+				lookTileSelectionObj.SetActive (true);
+				lookTileSelectionObj.transform.position = response.targetWorldPos;
+			}
+		}
+
 	}
 
 	public void OnTeleSelectionStop()
 	{
 		if (lookTileSelectionObj != null)
 			lookTileSelectionObj.SetActive (false);
+
+		StopDisplayingMoves ();
 	}
 
 	public void PlayerChangedWorldPos(Vector3 worldPos)
@@ -310,6 +334,13 @@ public class GameControllerScript : MonoBehaviour {
 			return responseObj;
 		}
 
+		List<Vector3> posesList = GetMovePosesToTargetTile (movingUnit.gridPos, gridPos);
+
+		while (posesList.Count > movingUnit.movesRemaining)
+			posesList.RemoveAt (posesList.Count - 1);
+
+		gridPos = posesList [posesList.Count - 1];
+
 		responseObj.spacesMoved = 1;
 		responseObj.canMove = true;
 
@@ -347,7 +378,12 @@ public class GameControllerScript : MonoBehaviour {
 
 	public int GetMoveDistToTargetTile(Vector3 fromGridPos, Vector3 toGridPos)
 	{
-		return GetMovePosesToTargetTile (fromGridPos, toGridPos).Count;
+		List<Vector3> posesList = GetMovePosesToTargetTile (fromGridPos, toGridPos);
+
+		if (posesList == null)
+			return 40000;
+		else 
+			return posesList.Count;
 	}
 
 	public List<Vector3> GetMovePosesToTargetTile(Vector3 fromGridPos, Vector3 toGridPos)
@@ -368,7 +404,8 @@ public class GameControllerScript : MonoBehaviour {
 
 		currSearchTiles.Add (toGridPos);
 
-		int currDist = 1;
+		int currDist = 2;
+		valueGrid [(int)toGridPos.x, (int)toGridPos.y, (int)toGridPos.z] = 1;
 
 		bool foundStart = false;
 
@@ -383,6 +420,8 @@ public class GameControllerScript : MonoBehaviour {
 				{
 					i = currSearchTiles.Count;
 					foundStart = true;
+
+					break;
 				}
 
 				if (MarkGridValue (valueGrid, currSearchTiles [i] + checkVec1, currDist, mapSize))
@@ -399,25 +438,28 @@ public class GameControllerScript : MonoBehaviour {
 			currSearchTiles = new List<Vector3> (newSearchTiles);
 
 			newSearchTiles.Clear ();
+
+			currDist += 1;
 		}
 
 		bool foundEnd = false;
 
 		Vector3 checkedPos = fromGridPos;
 
+		int myDist = 40000;
+
 		while (foundEnd == false)
 		{
 			if (checkedPos == toGridPos)
 			{
-				returnList.Add (toGridPos);
+				//returnList.Add (toGridPos);
 
 				foundEnd = true;
 			}
 			else
 			{
-
-				int bestDist = 400000;
-
+				bool nextTileFound = false;
+				int bestDist = myDist;
 				Vector3 bestPos = Vector3.zero;
 
 				int checkedVal = -1;
@@ -427,6 +469,7 @@ public class GameControllerScript : MonoBehaviour {
 				{
 					bestDist = checkedVal;
 					bestPos = checkedPos + checkVec1;
+					nextTileFound = true;
 				}
 
 				checkedVal = GetGridValue (valueGrid, checkedPos + checkVec2, mapSize);
@@ -434,6 +477,7 @@ public class GameControllerScript : MonoBehaviour {
 				{
 					bestDist = checkedVal;
 					bestPos = checkedPos + checkVec2;
+					nextTileFound = true;
 				}
 
 				checkedVal = GetGridValue (valueGrid, checkedPos + checkVec3, mapSize);
@@ -441,6 +485,7 @@ public class GameControllerScript : MonoBehaviour {
 				{
 					bestDist = checkedVal;
 					bestPos = checkedPos + checkVec3;
+					nextTileFound = true;
 				}
 
 				checkedVal = GetGridValue (valueGrid, checkedPos + checkVec4, mapSize);
@@ -448,12 +493,14 @@ public class GameControllerScript : MonoBehaviour {
 				{
 					bestDist = checkedVal;
 					bestPos = checkedPos + checkVec4;
+					nextTileFound = true;
 				}
 
-				if (bestDist < 40000)
+				if (nextTileFound)
 				{
 					returnList.Add (bestPos);
 					checkedPos = bestPos;
+					myDist = bestDist;
 				}
 				else
 				{
@@ -473,8 +520,11 @@ public class GameControllerScript : MonoBehaviour {
 		    markPos.x >= valGridSize.x || markPos.y >= valGridSize.y || markPos.z >= valGridSize.z)
 			return false;
 
+		if (tilesMap [(int)markPos.x, (int)markPos.y, (int)markPos.z].type != TileType.EMPTY)
+			return false;
+
 		// If this tile's dist is smaller, than proposed, then do nothing:
-		if (valueGrid [(int)markPos.x, (int)markPos.y, (int)markPos.z] > 0 && valueGrid [(int)markPos.x, (int)markPos.y, (int)markPos.z] < distVal)
+		if (valueGrid [(int)markPos.x, (int)markPos.y, (int)markPos.z] > 0 && valueGrid [(int)markPos.x, (int)markPos.y, (int)markPos.z] <= distVal)
 			return false;
 
 		valueGrid [(int)markPos.x, (int)markPos.y, (int)markPos.z] = distVal;
@@ -489,6 +539,8 @@ public class GameControllerScript : MonoBehaviour {
 			markPos.x >= valGridSize.x || markPos.y >= valGridSize.y || markPos.z >= valGridSize.z)
 			return -1;
 
+		if (valueGrid [(int)markPos.x, (int)markPos.y, (int)markPos.z] <= 0)
+			return -1;
 
 		return valueGrid [(int)markPos.x, (int)markPos.y, (int)markPos.z];
 	}

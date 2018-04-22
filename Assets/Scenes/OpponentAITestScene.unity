@@ -113,6 +113,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &51865605 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1259339849304568, guid: 34544fb53b9b42f4188e6055f6b62935,
+    type: 2}
+  m_PrefabInternal: {fileID: 323626096}
 --- !u!4 &51865606 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4870146866305678, guid: 34544fb53b9b42f4188e6055f6b62935,
@@ -457,7 +462,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4870146866305678, guid: 34544fb53b9b42f4188e6055f6b62935, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4870146866305678, guid: 34544fb53b9b42f4188e6055f6b62935, type: 2}
       propertyPath: m_LocalRotation.x
@@ -787,7 +792,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4708362717942040, guid: d94b80f45760dd74893d576f151fef0b, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 2
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4708362717942040, guid: d94b80f45760dd74893d576f151fef0b, type: 2}
       propertyPath: m_LocalRotation.x
@@ -1554,8 +1559,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lookTileSelectionObj: {fileID: 2133096355}
   playerTileWallObj: {fileID: 570950545}
-  currPlayerHighlightObj: {fileID: 0}
-  possibleMovePrefab: {fileID: 0}
+  currPlayerHighlightObj: {fileID: 51865605}
+  possibleMovePrefab: {fileID: 1177453085467934, guid: 31387376d1dea514db969de0ea52c485,
+    type: 2}
   mapSize: {x: 10, y: 1, z: 10}
   tileSize: {x: 1, y: 1, z: 1}
   firstTileOffset: {x: 0, y: 0, z: 0}
@@ -2762,7 +2768,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4306966807878572, guid: 31387376d1dea514db969de0ea52c485, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4306966807878572, guid: 31387376d1dea514db969de0ea52c485, type: 2}
       propertyPath: m_LocalRotation.x
@@ -3323,7 +3329,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4365252432389244, guid: ce9135a7dc9ae8e4690de8b277a97a7f, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4365252432389244, guid: ce9135a7dc9ae8e4690de8b277a97a7f, type: 2}
       propertyPath: m_LocalRotation.x
